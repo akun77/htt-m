@@ -7,6 +7,7 @@ import Vant from 'vant'
 import 'vant/lib/index.css'
 // 加载amfe-flexible REM适配工具
 import 'amfe-flexible'
+// 导入全局CSS
 import './styles/index.css'
 
 Vue.use(Vant)

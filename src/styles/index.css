@@ -75,6 +75,13 @@
 .iconyuedu:before {
   content: "\e615";
 }
+* {
+  box-sizing: border-box;
+}
+ul,
+li {
+  list-style-type: none;
+}
 body {
   background-color: #f5f7f9;
 }
@@ -82,5 +89,8 @@ body {
   background-color: #3296fa;
 }
 .page-nav-bar .van-nav-bar__title {
+  color: #fff;
+}
+.page-nav-bar .van-icon {
   color: #fff;
 }
