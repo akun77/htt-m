@@ -16,17 +16,32 @@
         <i slot="icon" class="iconfont iconshipin"></i>
         <span class="text">视频</span>
       </van-tabbar-item>
-      <van-tabbar-item to="/my">
+      <van-tabbar-item to="/my" v-if="user">
         <i slot="icon" class="iconfont iconwode"></i>
         <span class="text">我的</span>
+      </van-tabbar-item>
+      <van-tabbar-item to="/my" v-else>
+        <i slot="icon" class="iconfont iconwode"></i>
+        <span class="text">未登录</span>
       </van-tabbar-item>
     </van-tabbar>
   </div>
 </template>
 
 <script>
+import { mapState } from 'vuex'
+
+// import { mapState } from '@/store'
 export default {
-  name: 'LayoutIndex'
+  name: 'LayoutIndex',
+  data() {
+    return {
+      userInfo: {}
+    }
+  },
+  computed: {
+    ...mapState(['user'])
+  }
 }
 </script>
 <style lang="less">

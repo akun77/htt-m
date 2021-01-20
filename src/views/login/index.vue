@@ -63,7 +63,7 @@ export default {
   data() {
     return {
       user: {
-        mobile: '15511112222', // 手机号
+        mobile: '13911111114', // 手机号
         code: '246810' // 验证码
       },
       // 验证规则
@@ -107,6 +107,8 @@ export default {
         const { data } = await login(this.user)
         this.$store.commit('setUser', data.data)
         this.$toast.success('登录成功')
+        // 登录成功返回上一页
+        this.$router.back()
       } catch (error) {
         if (error.response.status === 400) {
           this.$toast.fail('手机或验证码错误')
