@@ -9,6 +9,8 @@ import 'vant/lib/index.css'
 import 'amfe-flexible'
 // 导入全局CSS
 import './styles/index.css'
+// 加载dayjs初始化设置
+import './utils/dayjs'
 
 Vue.use(Vant)
 
