@@ -51,7 +51,13 @@
 </template>
 
 <script>
-import { getChannels } from '@/api/channels'
+import {
+  getChannels,
+  addUserChannels,
+  deleteUserChannels
+} from '@/api/channels'
+import { mapState } from 'vuex'
+import { setItem } from '@/utils/storage'
 
 export default {
   name: 'ChannelEdit',
@@ -91,7 +97,9 @@ export default {
           return myChannel.id === channel.id
         })
       })
-    }
+    },
+    // 映射USER 从封装的USER工具中映射
+    ...mapState(['user'])
   },
   props: {
     myChannels: {
@@ -115,13 +123,28 @@ export default {
       }
     },
     // 添加频道
-    onAddChannel(recommendchannel) {
+    async onAddChannel(recommendchannel) {
       this.myChannels.push(recommendchannel)
+      // 数据持久化处理
+      if (this.user) {
+        try {
+          // 已登录 将数据请求接口 存储到线上
+          await addUserChannels({
+            id: recommendchannel.id, // 添加的id
+            seq: this.myChannels.length // 编号
+          })
+        } catch (error) {
+          this.$toast('添加频道失败，请稍后再试', error)
+        }
+      } else {
+        // 未登录 存储到本地
+        setItem('TOUTIAO_CHANNELS', this.myChannels)
+      }
     },
     // 我的频道点击事件
     onMyChannelClick(channel, index) {
       if (this.isEdit) {
-        // 判断是否是第一个元素 如果是 直接停止
+        // 判断是否是第t一个元素 如果是 直接停止
         if (this.fiexdChannels.includes(channel.id)) {
           return
         }
@@ -132,9 +155,26 @@ export default {
         // splice参数1：要删除元素的索引 包括本身
         // splice参数2：要删除的个数
         this.myChannels.splice(index, 1)
+        // 处理持久化
+        this.deleteUserChannel(channel)
       } else {
         // 非编辑状态下，进行切换
         this.$emit('updateActive', index, false)
+      }
+    },
+    // 删除用户指定频道
+    async deleteUserChannel(channel) {
+      // 判断用户是否登录
+      if (this.user) {
+        try {
+          // 已登录 将删除数据发送请求
+          await deleteUserChannels(channel.id)
+        } catch (error) {
+          this.$toast('删除失败，请稍后再试')
+        }
+      } else {
+        // 未登录 将数据进行本地保存
+        setItem('TOUTIAO_CHANNELS', this.myChannels)
       }
     }
   }
